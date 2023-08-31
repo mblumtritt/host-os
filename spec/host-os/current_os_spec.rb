@@ -13,6 +13,8 @@ RSpec.describe 'Current OS' do
 
   it 'can determine the suggested thread size' do
     expect(HostOS.suggested_thread_count).to be_an Integer
+
+    p(suggested_thread_count: HostOS.suggested_thread_count)
   end
 
   it 'can determine the temporary directory' do
@@ -31,18 +33,24 @@ RSpec.describe 'Current OS' do
   if HostOS.windows? || HostOS.posix? || HostOS.os2?
     it 'has a defined #dev_null' do
       expect(%w[/dev/null NUL nuk]).to include HostOS.dev_null
+
+      p(dev_null: HostOS.dev_null)
     end
   end
 
   if HostOS.windows? || HostOS.macosx? || HostOS.linux?
     it 'has a defined #open_command' do
       expect(%w[open xdg-open start]).to include HostOS.open_command
+
+      p(open_command: HostOS.open_command)
     end
   end
 
   if HostOS.windows? || HostOS.posix? || HostOS.interpreter.jruby?
     it 'can determine the memory size' do
       expect(HostOS.rss_bytes).to be_an Integer
+
+      p(rss_bytes: HostOS.rss_bytes)
     end
   end
 end

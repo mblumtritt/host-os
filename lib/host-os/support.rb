@@ -48,7 +48,10 @@ module HostOS
       end
 
       def rss_bytes
-        `tasklist /FI "PID eq #{Process.pid}" /FO CSV`.split(',')[4].to_i
+        `tasklist /FI "PID eq #{Process.pid}" /FO CSV`.split(',"')[-1].tr(
+          ',.',
+          '__'
+        ).to_i
       end
 
       private
