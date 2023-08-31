@@ -1,31 +1,29 @@
 name: Test
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 permissions:
   contents: read
 
 jobs:
-  ruby-versions:
-    uses: ruby/actions/.github/workflows/ruby_versions.yml@master
-    with:
-      min_version: 2.3
-      engine: cruby-jruby
-      
   test:
-    needs: ruby-versions
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}-latest
     strategy:
+      fail-fast: false
       matrix:
-        os: [ 'ubuntu-latest' ]
-        ruby: ${{ fromJson(needs.ruby-versions.outputs.versions) }}
+        os: [ubuntu]
+        ruby-version: [2.3, 2.7, 3.0, 3.2, head, jruby, truffleruby]
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-    - name: Install dependencies
-      run: bundle install
-    - name: Run tests
-      run: bundle exec rake test
+      - uses: actions/checkout@v3
+      - name: Set up Ruby ${{ matrix.ruby-version }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - name: Install dependencies
+        run: bundle install --jobs 4 --retry 3
+      - name: Run tests
+        run: bundle exec rake test
