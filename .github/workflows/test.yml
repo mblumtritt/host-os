@@ -16,10 +16,10 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu]
-        ruby-version: ['2.3', '2.7', '3.0', '3.2', head, jruby, truffleruby]
+        ruby: ['2.3', '2.7', '3.0', '3.2', head, jruby, truffleruby]
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Ruby ${{ matrix.ruby-version }}
+      - name: Set up Ruby ${{ matrix.ruby }}
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
