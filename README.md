@@ -15,26 +15,6 @@ HostOS is a module that offers details about the host operating system, the curr
 This gem helps you write environment-specific code in a clean way.
 It provides a simple API to get information about the operating system, the current Ruby interpreter, and the configured environment.
 
-## Installation
-
-You can install the gem in your system with
-
-```shell
-gem install host-os
-```
-
-or you can use [Bundler](http://gembundler.com/) to add HostOS just to your own project:
-
-```shell
-bundle add 'host-os'
-```
-
-After that you only need one line of code to have everything together
-
-```ruby
-require 'host-os'
-```
-
 ## Usage
 
 Here is a very simple example of OS dependent code:
@@ -94,3 +74,23 @@ HostOS.rss_bytes
 ```
 
 📕 See [the online help](https://rubydoc.info/gems/host-os/HostOS) for more details.
+
+## Installation
+
+This gem is compatible with Ruby 2.3 and higher. You can install it in your system with
+
+```shell
+gem install host-os
+```
+
+or you can use [Bundler](http://gembundler.com/) to add HostOS just to your own project:
+
+```shell
+bundle add 'host-os'
+```
+
+After that you only need one line of code to have everything together
+
+```ruby
+require 'host-os'
+```
