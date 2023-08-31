@@ -16,10 +16,6 @@ module HostOS
   #
   # @example Query if the environment is configured as "staging"
   #   HostOS.env.staging?
-  # @example Test if the environment is configured as "development"
-  #   HostOS.env == 'development'
-  # @example Test if the environment is configured as "test"
-  #   HostOS.env == :test
   # @example Test if the environment is configured as "production"
   #   HostOS.env.is? :production
   #

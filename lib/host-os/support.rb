@@ -39,8 +39,13 @@ module HostOS
 
     # @comment YARD requires this emoty line :/
     module Windows
-      def dev_null = 'NUL'
-      def open_command = 'start'
+      def dev_null
+        'NUL'
+      end
+
+      def open_command
+        'start'
+      end
 
       def rss_bytes
         `tasklist /FI "PID eq #{Process.pid}" /FO CSV`.split(',')[4].to_i
@@ -55,28 +60,43 @@ module HostOS
     end
 
     module Posix
-      def dev_null = '/dev/null'
-      def rss_bytes = `ps -o rss= -p #{Process.pid}`.to_i * 1024
+      def dev_null
+        '/dev/null'
+      end
+
+      def rss_bytes
+        `ps -o rss= -p #{Process.pid}`.to_i * 1024
+      end
 
       private
 
-      def _app_config_path = (ENV['XDG_CONFIG_HOME'] || '~/.config')
+      def _app_config_path
+        (ENV['XDG_CONFIG_HOME'] || '~/.config')
+      end
     end
 
     module OS2
-      def dev_null = 'nul'
+      def dev_null
+        'nul'
+      end
     end
 
     module MacOS
-      def open_command = 'open'
+      def open_command
+        'open'
+      end
 
       private
 
-      def _app_config_path = '~/Library/Application Support'
+      def _app_config_path
+        '~/Library/Application Support'
+      end
     end
 
     module Linux
-      def open_command = 'xdg-open'
+      def open_command
+        'xdg-open'
+      end
     end
 
     module AppConfigPath
@@ -97,7 +117,9 @@ module HostOS
       @suggested_thread_count ||= find_suggested_thread_count
     end
 
-    def temp_dir = (@temp_dir ||= find_temp_dir)
+    def temp_dir
+      (@temp_dir ||= find_temp_dir)
+    end
 
     private
 

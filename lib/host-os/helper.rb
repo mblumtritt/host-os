@@ -15,7 +15,7 @@ module HostOS
 
     def method_missing(name, *args)
       return super if name[-1] != '?'
-      return is?(name[..-2]) if args.empty?
+      return is?(name[0..-2]) if args.empty?
       raise(
         ArgumentError,
         "wrong number of arguments (given #{args.size}, expected 0)"

@@ -14,9 +14,6 @@ module HostOS
   # @example Query for TruffleRuby
   #   HostOS.interpreter.truffleruby?
   #
-  # @example Test for JRuby
-  #  HostOS.interpreter == :jruby
-  #
   module Interpreter
     extend Helper
 
