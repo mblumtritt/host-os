@@ -51,7 +51,7 @@ module HostOS
         `tasklist /FI "PID eq #{Process.pid}" /FO CSV`.split(',"')[-1].tr(
           ',.',
           '__'
-        ).to_i
+        ).to_i * 1024
       end
 
       private
