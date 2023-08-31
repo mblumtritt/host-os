@@ -3,39 +3,40 @@
 require_relative '../helper'
 
 RSpec.describe 'Current OS' do
-  it "is identified as '#{HostOS.id}'" do
+  it "is identified as :#{HostOS.id}" do
     expect(HostOS.id).to be_a Symbol
   end
 
-  it "has type '#{HostOS.type}'" do
-    expect(%i[bsd linux macosx unix windows]).to include(HostOS.type)
+  it "has type :#{HostOS.type}" do
+    expect(%i[unix macosx sunos windows vms os2]).to include HostOS.type
   end
 
   it 'can determine the suggested thread size' do
     expect(HostOS.suggested_thread_count).to be_an Integer
   end
 
-  it 'can determine the temprary directory' do
+  it 'can determine the temporary directory' do
+    expect(HostOS.temp_dir).not_to be_empty
     expect(File.directory?(HostOS.temp_dir)).to be true
   end
 
-  it 'has an interpreter attribute' do
+  it "has the interpreter attribute :#{HostOS.interpreter.id}" do
     expect(HostOS.interpreter).to be HostOS::Interpreter
   end
 
-  it 'has an env attribute' do
+  it "has env attribute :#{HostOS.env.id}" do
     expect(HostOS.env).to be HostOS::Env
   end
 
   if HostOS.windows? || HostOS.posix? || HostOS.os2?
-    it 'has a defined dev/null' do
-      expect(HostOS.dev_null).to be_a String
+    it 'has a defined #dev_null' do
+      expect(%w[/dev/null NUL nuk]).to include HostOS.dev_null
     end
   end
 
   if HostOS.windows? || HostOS.macosx? || HostOS.linux?
-    it 'has a defined open command' do
-      expect(HostOS.open_command).to be_a String
+    it 'has a defined #open_command' do
+      expect(%w[open xdg-open start]).to include HostOS.open_command
     end
   end
 
