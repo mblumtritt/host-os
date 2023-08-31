@@ -82,7 +82,7 @@ module HostOS
     # This attribute is `true` when Posix compatible commands like `fork` are
     # available.
     def posix?
-      defined?(Process.fork)
+      unix? && defined?(Process.fork)
     end
 
     # @param what [Symbol, String] the identifier to check
@@ -96,7 +96,8 @@ module HostOS
     private
 
     def identify
-      ruby_platform = RUBY_PLATFORM.downcase
+      require('rbconfig') unless defined?(RbConfig)
+      id = RbConfig::CONFIG['host_os'].downcase
       id, type, normalized =
         [
           ['linux', :unix],
@@ -122,7 +123,7 @@ module HostOS
           ['emc', :windows],
           ['vms', :vms],
           ['os2', :os2]
-        ].find { |pi| ruby_platform.include?(pi[0]) }
+        ].find { |pi| id.include?(pi[0]) }
       id ? [normalized || id.to_sym, type] : %i[unknown unknown]
     end
   end
