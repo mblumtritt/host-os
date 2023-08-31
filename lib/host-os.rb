@@ -13,53 +13,77 @@ module HostOS
   class << self
     # @attribute [r] id
     # @return [Symbol] OS identifier
-    def id = ID
+    def id
+      ID
+    end
 
     # @attribute [r] type
     # @return [:unix,  :windows, :vms, :os2, :unknown] OS type
-    def type = TYPE
+    def type
+      TYPE
+    end
 
     # @attribute [r] interpreter
     # @return [Interpreter] interpreter information
-    def interpreter = Interpreter
+    def interpreter
+      Interpreter
+    end
 
     # @attribute [r] env
     # @return [Env] environment information
-    def env = Env
+    def env
+      Env
+    end
 
     # @attribute [r] unix?
     # @return [true, false] whether the host OS is a Unix OS
-    def unix? = (TYPE == :unix)
+    def unix?
+      TYPE == :unix
+    end
 
     # @attribute [r] windows?
     # @return [true, false] whether the host OS is a Windows OS
-    def windows? = (TYPE == :windows)
+    def windows?
+      TYPE == :windows
+    end
 
     # @attribute [r] vms?
     # @return [true, false] whether the host OS is VMS
-    def vms? = (TYPE == :vms)
+    def vms?
+      TYPE == :vms
+    end
 
     # @attribute [r] os2?
     # @return [true, false] whether the host OS is OS/2
-    def os2? = (TYPE == :os2)
+    def os2?
+      TYPE == :os2
+    end
 
     # @attribute [r] macosx?
     # @return [true, false] whether the host OS is identified as MacOS
-    def macosx? = (ID == :macosx)
+    def macosx?
+      ID == :macosx
+    end
 
     # @attribute [r] linux?
     # @return [true, false] whether the host OS is identified as Linux derivate
-    def linux? = (ID == :linux)
+    def linux?
+      ID == :linux
+    end
 
     # @attribute [r] cygwin?
     # @return [true, false] whether the host OS is Windows/Cygwin
-    def cygwin? = (ID == :cygwin)
+    def cygwin?
+      ID == :cygwin
+    end
 
     # @attribute [r] posix?
     # @return [true, false] whether the host OS is Posix compatible
     # This attribute is `true` when Posix compatible commands like `fork` are
     # available.
-    def posix? = defined?(Process.fork)
+    def posix?
+      defined?(Process.fork)
+    end
 
     # @param what [Symbol, String] the identifier to check
     # @return [true, false] whether the host OS is the given identifier or type

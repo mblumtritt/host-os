@@ -42,7 +42,9 @@ module HostOS
 
       # @attribute [r] id
       # @return [Symbol] environment identifier
-      def id = ID
+      def id
+        ID
+      end
 
       # @!method is?(what)
       # @param what [Symbol, String] the identifier to check

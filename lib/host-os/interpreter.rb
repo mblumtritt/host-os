@@ -23,35 +23,47 @@ module HostOS
     class << self
       # @attribute [r] id
       # @return [Symbol] interpreter identifier
-      def id = ID
+      def id
+        ID
+      end
 
       # @attribute [r] mri?
       # @return [true, false] whether the interpreter is the Yukihiro Matsumoto's
       #   C-based (default) Ruby Interpreter
-      def mri? = (ID == :mri)
+      def mri?
+        ID == :mri
+      end
       alias default? mri?
 
       # @attribute [r] cardinal?
       # @return [true, false] whether the interpreter is the Parrot based Cardinal
       #   interpreter
-      def cardinal? = (ID == :cardinal)
+      def cardinal?
+        ID == :cardinal
+      end
       alias parrot? cardinal?
 
       # @attribute [r] jruby?
       # @return [true, false] whether the interpreter is the Java based JRuby
       #  Interpreter
-      def jruby? = (ID == :jruby)
+      def jruby?
+        ID == :jruby
+      end
       alias java? jruby?
 
       # @attribute [r] rbx?
       # @return [true, false] whether the interpreter is the Rubinius Interpreter
-      def rbx? = (ID == :rbx)
+      def rbx?
+        ID == :rbx
+      end
       alias rubinius? rbx?
 
       # @attribute [r] ree?
       # @return [true, false] whether the interpreter is the Ruby Enterprise
       #   Edition
-      def ree? = (ID == :ree)
+      def ree?
+        ID == :ree
+      end
       alias enterprise? ree?
 
       # @!method is?(what)
