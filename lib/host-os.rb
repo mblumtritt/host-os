@@ -118,8 +118,8 @@ module HostOS
       def mri?
         ID == :mri
       end
-      alias default? mri?
       alias cruby? mri?
+      alias default? mri?
 
       # @attribute [r] cardinal?
       # @return [true, false] whether the interpreter is the Parrot based Cardinal
@@ -248,7 +248,7 @@ module HostOS
     # This attribute is `true` when Posix compatible commands like `fork` are
     # available.
     def posix?
-      unix? && defined?(Process.fork)
+      unix? || defined?(Process.fork) ? true : false
     end
 
     # @param what [Symbol, String] the identifier to check

@@ -5,4 +5,4 @@ require_relative '../lib/host-os/support'
 
 $stdout.sync = $stderr.sync = $VERBOSE = true
 RSpec.configure(&:disable_monkey_patching!)
-RSpec.configure { |config| config.formatter = :documentation }
+Dir.glob("#{__dir__}/shared_examples/*.rb").each { |f| require(f) }
