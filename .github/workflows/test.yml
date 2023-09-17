@@ -18,7 +18,7 @@ jobs:
         os: [ubuntu]
         ruby: ['2.3', '2.7', '3.0', '3.2', head, jruby, truffleruby]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Ruby ${{ matrix.ruby }}
         uses: ruby/setup-ruby@v1
         with:
