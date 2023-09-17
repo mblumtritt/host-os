@@ -2,6 +2,9 @@
 
 RSpec.shared_examples 'non_posix' do
   it 'does not support Posix commands' do
-    expect { Process.fork { true } }.to raise_error(/method `fork'/)
+    expect { Process.fork { true } }.to raise_error(
+      NotImplementedError,
+      /fork is not available/
+    )
   end
 end
