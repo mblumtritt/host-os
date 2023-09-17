@@ -12,7 +12,6 @@ RSpec.shared_examples 'windows' do
       os2?: false,
       macosx?: true,
       linux?: false,
-      posix?: false,
       open_command: 'start',
       dev_null: 'NUL',
       suggested_thread_count: kind_of(Integer),

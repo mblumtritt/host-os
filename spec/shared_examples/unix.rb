@@ -12,7 +12,6 @@ RSpec.shared_examples 'unix' do
       os2?: false,
       macosx?: false,
       linux?: false,
-      posix?: true,
       dev_null: '/dev/null',
       suggested_thread_count: kind_of(Integer),
       temp_dir: kind_of(String),

@@ -12,7 +12,6 @@ RSpec.shared_examples 'cygwin' do
       os2?: false,
       macosx?: true,
       linux?: false,
-      posix?: true,
       open_command: 'start',
       dev_null: 'NUL',
       suggested_thread_count: kind_of(Integer),

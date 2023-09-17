@@ -12,7 +12,6 @@ RSpec.shared_examples 'linux' do
       os2?: false,
       macosx?: false,
       linux?: true,
-      posix?: true,
       open_command: 'xdg-open',
       dev_null: '/dev/null',
       suggested_thread_count: kind_of(Integer),

@@ -12,7 +12,6 @@ RSpec.shared_examples 'macosx' do
       os2?: false,
       macosx?: true,
       linux?: false,
-      posix?: true,
       open_command: 'open',
       dev_null: '/dev/null',
       suggested_thread_count: kind_of(Integer),

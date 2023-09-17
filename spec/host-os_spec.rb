@@ -21,4 +21,6 @@ RSpec.describe HostOS do
   when :os2
     include_examples 'os2'
   end
+
+  include_examples(HostOS.posix? ? 'posix' : 'non_posix')
 end
