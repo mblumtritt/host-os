@@ -248,7 +248,7 @@ module HostOS
     # This attribute is `true` when Posix compatible commands like `fork` are
     # available.
     def posix?
-      unix? || defined?(Process.fork) ? true : false
+      Process.respond_to?(:fork)
     end
 
     # @param what [Symbol, String] the identifier to check
@@ -289,7 +289,7 @@ module HostOS
           ['emc', :windows],
           ['vms', :vms],
           ['os2', :os2]
-        ].find { |pi| id.include?(pi[0]) }
+        ].find { |info| id.include?(info[0]) }
       id ? [normalized || id.to_sym, type] : %i[unknown unknown]
     end
   end
