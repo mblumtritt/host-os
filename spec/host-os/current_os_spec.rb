@@ -28,7 +28,7 @@ RSpec.describe 'Current OS' do
     expect(HostOS.env).to be HostOS::Env
   end
 
-  if HostOS.windows? || HostOS.posix? || HostOS.os2?
+  if HostOS.windows? || HostOS.unix? || HostOS.os2?
     it 'has a defined #dev_null' do
       expect(%w[/dev/null NUL nuk]).to include HostOS.dev_null
     end
@@ -40,7 +40,7 @@ RSpec.describe 'Current OS' do
     end
   end
 
-  if HostOS.windows? || HostOS.posix? || HostOS.interpreter.jruby?
+  if HostOS.windows? || HostOS.unix? || HostOS.interpreter.jruby?
     it 'can determine the memory size' do
       expect(HostOS.rss_bytes).to be_an Integer
     end
