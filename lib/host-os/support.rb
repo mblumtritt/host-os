@@ -116,48 +116,50 @@ module HostOS
       end
     end
 
-    def suggested_thread_count
-      @suggested_thread_count ||= find_suggested_thread_count
-    end
+    module Tools
+      def suggested_thread_count
+        @suggested_thread_count ||= find_suggested_thread_count
+      end
 
-    def temp_dir
-      (@temp_dir ||= find_temp_dir)
-    end
+      def temp_dir
+        (@temp_dir ||= find_temp_dir)
+      end
 
-    private
+      private
 
-    def find_suggested_thread_count
-      count = ENV['TC'].to_i
-      count > 0 ? count : with_etc(4) { Etc.nprocessors }
-    end
+      def find_suggested_thread_count
+        count = ENV['TC'].to_i
+        count > 0 ? count : with_etc(4) { Etc.nprocessors }
+      end
 
-    def find_temp_dir
-      return Dir.tmpdir if defined?(Dir.tmpdir)
-      as_dir('TMPDIR') || as_dir('TMP') || as_dir('TEMP') ||
-        as_dir(
-          'system temp dir',
-          with_etc("#{ENV['LOCALAPPDATA']}/Temp") { Etc.systmpdir }
-        ) || as_dir('/tmp', '/tmp') || as_dir('.', '.')
-    end
+      def find_temp_dir
+        return Dir.tmpdir if defined?(Dir.tmpdir)
+        as_dir('TMPDIR') || as_dir('TMP') || as_dir('TEMP') ||
+          as_dir(
+            'system temp dir',
+            with_etc("#{ENV['LOCALAPPDATA']}/Temp") { Etc.systmpdir }
+          ) || as_dir('/tmp', '/tmp') || as_dir('.', '.')
+      end
 
-    def as_dir(name, dirname = ENV[name])
-      return if dirname.nil? || dirname.empty?
-      dirname = File.expand_path(dirname)
-      stat = File.stat(dirname)
-      stat.directory? or warn("#{name} is not a valid directory - #{dirname}")
-      stat.writable? or warn("#{name} is not writable - #{dirname}")
-      (stat.world_writable? && !stat.sticky?) and
-        warn("#{name} is world-writable - #{dirname}")
-      dirname
-    rescue SystemCallError
-      nil
-    end
+      def as_dir(name, dirname = ENV[name])
+        return if dirname.nil? || dirname.empty?
+        dirname = File.expand_path(dirname)
+        stat = File.stat(dirname)
+        stat.directory? or warn("#{name} is not a valid directory - #{dirname}")
+        stat.writable? or warn("#{name} is not writable - #{dirname}")
+        (stat.world_writable? && !stat.sticky?) and
+          warn("#{name} is world-writable - #{dirname}")
+        dirname
+      rescue SystemCallError
+        nil
+      end
 
-    def with_etc(default)
-      require('etc') unless defined?(Etc)
-      yield
-    rescue LoadError
-      default
+      def with_etc(default)
+        require('etc') unless defined?(Etc)
+        yield
+      rescue LoadError
+        default
+      end
     end
   end
 
@@ -168,7 +170,7 @@ module HostOS
   extend Support::Linux if linux?
   extend Support::AppConfigPath if windows? || posix?
   extend Support::JRuby if Interpreter.jruby?
-  extend Support
+  extend Support::Tools
 
   module Support
     private_constant :Windows
@@ -178,5 +180,6 @@ module HostOS
     private_constant :Linux
     private_constant :AppConfigPath
     private_constant :JRuby
+    private_constant :Tools
   end
 end
