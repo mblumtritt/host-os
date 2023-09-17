@@ -12,7 +12,7 @@ module HostOS
   module Support
     # @attribute [r] dev_null
     # @return [String] name of or path to the null device
-    # @note This attribute is only available on Windows, OS2 and Posix systems.
+    # @note This attribute is only available on Windows, OS2 and Unix systems.
 
     # @attribute [r] open_command
     # @return [String] name of the open command
@@ -20,7 +20,7 @@ module HostOS
 
     # @attribute [r] rss_bytes
     # @return [Integer] number of bytes used by the current process
-    # @note This attribute is only available on Windows and Posix or when using
+    # @note This attribute is only available on Windows and Unix or when using
     #   JRuby
 
     # @attribute [r] suggested_thread_count

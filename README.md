@@ -36,7 +36,7 @@ You are free to write your code in whatever way you prefer. Here is a functional
 ```ruby
 require 'host-os'
 
-if HostOS.is? unix?
+if HostOS.is? :unix
   puts 'Hello Unix world!'
 elsif HostOS.is? 'windows'
   puts 'Clean your Windows!'
@@ -63,7 +63,7 @@ There are additional methods that can support you on various platforms:
 require 'host-os/support'
 
 HostOS.dev_null
-# => returns 'NUL' on Windows, 'nul' for OS2 and '/dev/null' on Posix platforms
+# => returns 'NUL' on Windows, 'nul' for OS2 and '/dev/null' on Unix platforms
 
 HostOS.app_config_path('my_app')
 # => returns the directory name where 'my_app' stores its configuration files
