@@ -62,7 +62,7 @@ module HostOS
       end
     end
 
-    module Posix
+    module Unix
       def dev_null
         '/dev/null'
       end
@@ -164,17 +164,17 @@ module HostOS
   end
 
   extend Support::Windows if windows?
-  extend Support::Posix if posix?
+  extend Support::Unix if unix?
   extend Support::MacOS if macosx?
   extend Support::OS2 if os2?
   extend Support::Linux if linux?
-  extend Support::AppConfigPath if windows? || posix?
+  extend Support::AppConfigPath if windows? || unix?
   extend Support::JRuby if Interpreter.jruby?
   extend Support::Tools
 
   module Support
     private_constant :Windows
-    private_constant :Posix
+    private_constant :Unix
     private_constant :OS2
     private_constant :MacOS
     private_constant :Linux
