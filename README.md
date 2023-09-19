@@ -1,14 +1,12 @@
 # HostOS
 
-<!-- TODO: ![version](https://img.shields.io/gem/v/host-os?label=) -->
+![version](https://img.shields.io/gem/v/host-os?label=)
 
 HostOS is a module that offers details about the host operating system, the current Ruby interpreter, and the environment currently in use.
 
-<!-- TODO:
 - Gem: [rubygems.org](https://rubygems.org/gems/host-os)
 - Source: [github.com](https://github.com/mblumtritt/host-os)
 - Help: [rubydoc.info](https://rubydoc.info/gems/host-os/HostOS)
--->
 
 ## Description
 
@@ -51,10 +49,10 @@ The module also assists with environment- or interpreter-specific code:
 require 'host-os'
 
 Logger.log_level = HostOS.env.production? ? Logger::WARN : Logger::INFO
-# => sets the log level to 'WARN' in production, 'INFO' otherwise
+# => set the log level to 'WARN' in production, 'INFO' otherwise
 
 require 'java' if HostOS.interpreter.jruby?
-# => loads the Java support for JRuby
+# => load the Java support for JRuby
 ```
 
 There are additional methods that can support you on various platforms:
