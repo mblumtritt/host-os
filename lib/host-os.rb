@@ -152,6 +152,23 @@ module HostOS
       end
       alias enterprise? ree?
 
+      # @attribute [r] jit_enabled?
+      # @return [true, false] whether the interpreter currently uses a JIT
+      #   Compiler
+      def jit_enabled?
+        jit_type != :none
+      end
+
+      # @attribute [r] jit_type
+      # @return [:mjit, :rjit, :yjit, :java, :none] type of currently used JIT
+      #   Compiler
+      def jit_type
+        return :mjit if defined?(RubyVM::MJIT) && RubyVM::MJIT.enabled?
+        return :yjit if defined?(RubyVM::YJIT) && RubyVM::YJIT.enabled?
+        return :rjit if defined?(RubyVM::RJIT) && RubyVM::RJIT.enabled?
+        jruby? ? :java : :none
+      end
+
       # @!method is?(what)
       # @param what [Symbol, String] the identifier to check
       # @return [true, false] whether the interpreter is the given identifier
