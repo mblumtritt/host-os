@@ -169,6 +169,26 @@ module HostOS
         jruby? ? :java : :none
       end
 
+      # @!visibility private
+      def to_s
+        case ID
+        when :mri
+          'CRuby'
+        when :ree
+          'Enterprise Ruby'
+        when :cardinal
+          'Cardinal'
+        when :jruby
+          'JRuby'
+        when :rby
+          'Rubinius'
+        when :truffleruby
+          'TruffleRuby'
+        else
+          ID.to_s.upcase
+        end
+      end
+
       # @!method is?(what)
       # @param what [Symbol, String] the identifier to check
       # @return [true, false] whether the interpreter is the given identifier
@@ -274,6 +294,38 @@ module HostOS
       return true if (ID == what) || (TYPE == what)
       what = defined?(what.to_sym) ? what.to_sym : what.to_s.to_sym
       (ID == what) || (TYPE == what)
+    end
+
+    # @!visibility private
+    def to_s
+      case ID
+      when :linux
+        'Linux'
+      when :macosx
+        'MacOSX'
+      when :freebsd
+        'FreeBSD'
+      when :netbsd
+        'NetBSD'
+      when :openbsd
+        'OpenBSD'
+      when :dragonfly
+        'Dragonly'
+      when :sunis
+        'SunOS'
+      when :mswin
+        'MSWin'
+      when :mingw
+        'MinGW'
+      when :bccwin
+        'BCCWin'
+      when :wince
+        'WinCE'
+      when :windows, :cygwin
+        ID.to_s.capitalize
+      else
+        ID.to_s.upcase
+      end
     end
 
     private
