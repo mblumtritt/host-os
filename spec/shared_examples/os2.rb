@@ -5,7 +5,7 @@ RSpec.shared_examples 'os2' do
     is_expected.to eq(
       interpreter: HostOS::Interpreter,
       env: HostOS::Env,
-      type: :vms,
+      type: :os2,
       unix?: false,
       windows?: false,
       vms?: true,
