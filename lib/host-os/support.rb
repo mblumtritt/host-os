@@ -122,7 +122,7 @@ module HostOS
       end
 
       def temp_dir
-        (@temp_dir ||= find_temp_dir)
+        @temp_dir ||= find_temp_dir
       end
 
       private
