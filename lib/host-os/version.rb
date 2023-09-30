@@ -2,5 +2,5 @@
 
 module HostOS
   # @return [String] the version number of the gem
-  VERSION = '0.0.9'
+  VERSION = '0.1.0'
 end
