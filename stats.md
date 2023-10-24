@@ -16,7 +16,6 @@
 
 ![last commit](https://img.shields.io/github/last-commit/mblumtritt/host-os/main)
 ![files](https://img.shields.io/github/directory-file-count/mblumtritt/host-os)
-![build status](https://img.shields.io/github/workflow/status/mblumtritt/host-os/Ruby)
 ![dependencies](https://img.shields.io/librariesio/github/mblumtritt/host-os)
 
 ![commit activity](https://img.shields.io/github/commit-activity/m/mblumtritt/host-os)
