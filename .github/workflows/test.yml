@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu]
-        ruby: ['2.3', '2.7', '3.0', '3.2', '3.3', head, jruby, truffleruby]
+        ruby: ['2.7', '3.0', '3.2', '3.3', head, jruby, truffleruby]
     steps:
       - uses: actions/checkout@v4
       - name: Set up Ruby ${{ matrix.ruby }}
