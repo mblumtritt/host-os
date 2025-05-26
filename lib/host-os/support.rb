@@ -32,8 +32,8 @@ module HostOS
     # @!method app_config_path(app_name)
     # @param app_name [String] name of the application
     # @return [String] absolute name of the directory
-    # Determines the name of the directory where application specific data should
-    # be stored.
+    # Determines the name of the directory where application specific data
+    # should be stored.
     # @note This method is only available on Windows and Posix-compatible
     #   systems.
 
@@ -129,19 +129,31 @@ module HostOS
 
       def find_suggested_thread_count
         count = ENV['TC'].to_i
-        count > 0 ? count : with_etc(4) { Etc.nprocessors }
+        return count if count > 0
+        begin
+          require('etc') unless defined?(Etc)
+          Etc.nprocessors
+        rescue LoadError
+          4
+        end
       end
 
       def find_temp_dir
         return Dir.tmpdir if defined?(Dir.tmpdir)
-        as_dir('TMPDIR') || as_dir('TMP') || as_dir('TEMP') ||
-          as_dir(
-            'system temp dir',
-            with_etc("#{ENV['LOCALAPPDATA']}/Temp") { Etc.systmpdir }
-          ) || as_dir('/tmp', '/tmp') || as_dir('.', '.')
+        ret = as_dir('TMPDIR') || as_dir('TMP') || as_dir('TEMP')
+        return ret if ret
+        ret =
+          begin
+            require('etc') unless defined?(Etc)
+            Etc.systmpdir
+          rescue LoadError
+            "#{ENV['LOCALAPPDATA']}/Temp"
+          end
+        as_dir('system temp', ret) || as_dir('/tmp', '/tmp') || as_dir('.', '.')
       end
 
-      def as_dir(name, dirname = ENV[name])
+      def as_dir(name, dirname = nil)
+        dirname ||= ENV[name]
         return if dirname.nil? || dirname.empty?
         dirname = File.expand_path(dirname)
         stat = File.stat(dirname)
@@ -152,13 +164,6 @@ module HostOS
         dirname
       rescue SystemCallError
         nil
-      end
-
-      def with_etc(default)
-        require('etc') unless defined?(Etc)
-        yield
-      rescue LoadError
-        default
       end
     end
   end

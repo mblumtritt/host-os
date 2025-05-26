@@ -9,7 +9,7 @@ RSpec::Core::RakeTask.new(:test) { |t| t.ruby_opts = %w[-w] }
 
 require 'yard'
 
-CLEAN << '.yardoc'
+CLEAN << '.yardoc' << 'tmp'
 CLOBBER << 'doc'
 
 YARD::Rake::YardocTask.new(:doc) { |t| t.stats_options = %w[--list-undoc] }

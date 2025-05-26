@@ -8,11 +8,11 @@
 module HostOS
   module Helper
     def is?(what)
-      return true if id == what
-      id == (defined?(what.to_sym) ? what.to_sym : what.to_s.to_sym)
+      id == what ||
+        (id == (defined?(what.to_sym) ? what.to_sym : what.to_s.to_sym))
     end
 
-    protected
+    private
 
     def respond_to_missing?(name, _include_all = false)
       (name[-1] == '?') || super
@@ -78,10 +78,8 @@ module HostOS
 
       def identify
         found =
-          (
-            ENV['RAILS_ENV'] || ENV['RACK_ENV'] || ENV['ENVIRONMENT'] ||
-              ENV['ENV']
-          )
+          ENV['RAILS_ENV'] || ENV['RACK_ENV'] || ENV['ENVIRONMENT'] ||
+            ENV['ENV']
         return :production if found.nil? || found.empty?
         found.downcase.tr(' -', '__').to_sym
       end
@@ -113,8 +111,8 @@ module HostOS
       end
 
       # @attribute [r] mri?
-      # @return [true, false] whether the interpreter is the Yukihiro Matsumoto's
-      #   C-based (default) Ruby Interpreter
+      # @return [true, false] whether the interpreter is the Yukihiro
+      #   Matsumoto's C-based (default) Ruby Interpreter
       def mri?
         ID == :mri
       end
@@ -122,8 +120,8 @@ module HostOS
       alias default? mri?
 
       # @attribute [r] cardinal?
-      # @return [true, false] whether the interpreter is the Parrot based Cardinal
-      #   interpreter
+      # @return [true, false] whether the interpreter is the Parrot based
+      #   Cardinal interpreter
       def cardinal?
         ID == :cardinal
       end
@@ -138,7 +136,8 @@ module HostOS
       alias java? jruby?
 
       # @attribute [r] rbx?
-      # @return [true, false] whether the interpreter is the Rubinius Interpreter
+      # @return [true, false] whether the interpreter is the Rubinius
+      #   Interpreter
       def rbx?
         ID == :rbx
       end
@@ -171,22 +170,7 @@ module HostOS
 
       # @!visibility private
       def to_s
-        case ID
-        when :mri
-          'CRuby'
-        when :ree
-          'Enterprise Ruby'
-        when :cardinal
-          'Cardinal'
-        when :jruby
-          'JRuby'
-        when :rby
-          'Rubinius'
-        when :truffleruby
-          'TruffleRuby'
-        else
-          ID.to_s.upcase
-        end
+        NAMES[ID] || ID.to_s.upcase
       end
 
       # @!method is?(what)
@@ -209,6 +193,17 @@ module HostOS
 
     # @return [Symbol] interpreter identifier
     ID = identify
+
+    NAMES = {
+      cardinal: 'Cardinal',
+      jruby: 'JRuby',
+      mri: 'CRuby',
+      rby: 'Rubinius',
+      ree: 'Enterprise Ruby',
+      truffleruby: 'TruffleRuby'
+    }.compare_by_identity.freeze
+
+    private_constant :NAMES
   end
 
   extend Helper
@@ -298,34 +293,7 @@ module HostOS
 
     # @!visibility private
     def to_s
-      case ID
-      when :linux
-        'Linux'
-      when :macosx
-        'MacOSX'
-      when :freebsd
-        'FreeBSD'
-      when :netbsd
-        'NetBSD'
-      when :openbsd
-        'OpenBSD'
-      when :dragonfly
-        'Dragonly'
-      when :sunis
-        'SunOS'
-      when :mswin
-        'MSWin'
-      when :mingw
-        'MinGW'
-      when :bccwin
-        'BCCWin'
-      when :wince
-        'WinCE'
-      when :windows, :cygwin
-        ID.to_s.capitalize
-      else
-        ID.to_s.upcase
-      end
+      NAMES[ID] || ID.to_s.upcase
     end
 
     private
@@ -335,7 +303,7 @@ module HostOS
       id = RbConfig::CONFIG['host_os'].downcase
       id, type, normalized =
         [
-          ['linux', :unix],
+          ['linux', :unix, :linux],
           ['arch', :unix, :linux],
           ['darwin', :unix, :macosx],
           ['mac', :unix, :macosx],
@@ -364,4 +332,19 @@ module HostOS
   end
 
   ID, TYPE = identify
+  NAMES = {
+    bccwin: 'BCCWin',
+    cygwin: 'Cygwin',
+    dragonfly: 'Dragonly',
+    freebsd: 'FreeBSD',
+    linux: 'Linux',
+    macosx: 'MacOSX',
+    mingw: 'MinGW',
+    mswin: 'MSWin',
+    netbsd: 'NetBSD',
+    openbsd: 'OpenBSD',
+    sunos: 'SunOS',
+    wince: 'WinCE',
+    windows: 'Windows'
+  }.compare_by_identity.freeze
 end

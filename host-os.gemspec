@@ -22,8 +22,8 @@ Gem::Specification.new do |spec|
   spec.metadata['documentation_uri'] = 'https://rubydoc.info/gems/host-os'
   spec.metadata['rubygems_mfa_required'] = 'true'
 
-  spec.required_ruby_version = '> 2.3'
+  spec.required_ruby_version = '>= 2.7'
 
-  spec.files = Dir['lib/**/*'] + Dir['examples/**/*']
+  spec.files = (Dir['lib/**/*'] + Dir['examples/**/*']) << '.yardopts'
   spec.extra_rdoc_files = %w[README.md LICENSE]
 end

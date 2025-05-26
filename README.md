@@ -1,6 +1,4 @@
-# HostOS
-
-![version](https://img.shields.io/gem/v/host-os?label=)
+# HostOS ![version](https://img.shields.io/gem/v/host-os?label=)
 
 HostOS is a module that offers details about the host operating system, the current Ruby interpreter, and the environment currently in use.
 
