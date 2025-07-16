@@ -17,10 +17,12 @@ Gem::Specification.new do |spec|
   spec.author = 'Mike Blumtritt'
   spec.license = 'BSD-3-Clause'
   spec.homepage = 'https://github.com/mblumtritt/host-os'
+  spec.metadata['rubygems_mfa_required'] = 'true'
   spec.metadata['source_code_uri'] = spec.homepage
   spec.metadata['bug_tracker_uri'] = "#{spec.homepage}/issues"
-  spec.metadata['documentation_uri'] = 'https://rubydoc.info/gems/host-os'
-  spec.metadata['rubygems_mfa_required'] = 'true'
+  spec.metadata[
+    'documentation_uri'
+  ] = "https://rubydoc.info/gems/host-os/#{HostOS::VERSION}/HostOS"
 
   spec.required_ruby_version = '>= 2.7'
 

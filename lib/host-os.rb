@@ -6,276 +6,65 @@
 # It helps you write environment-specific code in a clean way.
 #
 module HostOS
-  module Helper
-    def is?(what)
-      id == what ||
-        (id == (defined?(what.to_sym) ? what.to_sym : what.to_s.to_sym))
-    end
-
-    private
-
-    def respond_to_missing?(name, _include_all = false)
-      (name[-1] == '?') || super
-    end
-
-    def method_missing(name, *args)
-      return super if name[-1] != '?'
-      return is?(name[0..-2]) if args.empty?
-      raise(
-        ArgumentError,
-        "wrong number of arguments (given #{args.size}, expected 0)"
-      )
-    end
-  end
-  private_constant :Helper
-
-  #
-  # This module allows to identify the current environment by checking the `ENV`
-  # for the following variables in order:
-  #
-  # * RAILS_ENV
-  # * RACK_ENV
-  # * ENVIRONMENT
-  # * ENV
-  #
-  # You can check for any boolean attribute:
-  #
-  # @example Query if the environment is configured as "staging"
-  #   HostOS.env.staging?
-  # @example Test if the environment is configured as "production"
-  #   HostOS.env.is? :production
-  #
-  # @note When no environment is configured 'prod
-  #
-  module Env
-    extend Helper
-
-    class << self
-      # @attribute [r] production?
-      # @return [true, false] whether the environment is configured as "production"
-      # @note This will return true if the environment is not configured.
-
-      # @attribute [r] test?
-      # @return [true, false] whether the environment is configured as "test"
-
-      # @attribute [r] development?
-      # @return [true, false] whether the environment is configured as
-      #   "development"
-
-      # @attribute [r] id
-      # @return [Symbol] environment identifier
-      def id
-        ID
-      end
-
-      # @!method is?(what)
-      # @param what [Symbol, String] the identifier to check
-      # @return [true, false] whether the environment is the given identifier
-
-      # @comment YARD requires this line
-
-      private
-
-      def identify
-        found =
-          ENV['RAILS_ENV'] || ENV['RACK_ENV'] || ENV['ENVIRONMENT'] ||
-            ENV['ENV']
-        return :production if found.nil? || found.empty?
-        found.downcase.tr(' -', '__').to_sym
-      end
-    end
-
-    # @return [Symbol] environment identifier
-    ID = identify
-  end
-
-  #
-  # This module allows to identify the used Ruby interpreter.
-  #
-  # Besides here documented boolean attributes you can also check for any other
-  # boolean attribute or interpreter name:
-  #
-  # @example Query for the Opal interpreter
-  #   HostOS.interpreter.opal?
-  # @example Query for TruffleRuby
-  #   HostOS.interpreter.truffleruby?
-  #
-  module Interpreter
-    extend Helper
-
-    class << self
-      # @attribute [r] id
-      # @return [Symbol] interpreter identifier
-      def id
-        ID
-      end
-
-      # @attribute [r] mri?
-      # @return [true, false] whether the interpreter is the Yukihiro
-      #   Matsumoto's C-based (default) Ruby Interpreter
-      def mri?
-        ID == :mri
-      end
-      alias cruby? mri?
-      alias default? mri?
-
-      # @attribute [r] cardinal?
-      # @return [true, false] whether the interpreter is the Parrot based
-      #   Cardinal interpreter
-      def cardinal?
-        ID == :cardinal
-      end
-      alias parrot? cardinal?
-
-      # @attribute [r] jruby?
-      # @return [true, false] whether the interpreter is the Java based JRuby
-      #  Interpreter
-      def jruby?
-        ID == :jruby
-      end
-      alias java? jruby?
-
-      # @attribute [r] rbx?
-      # @return [true, false] whether the interpreter is the Rubinius
-      #   Interpreter
-      def rbx?
-        ID == :rbx
-      end
-      alias rubinius? rbx?
-
-      # @attribute [r] ree?
-      # @return [true, false] whether the interpreter is the Ruby Enterprise
-      #   Edition
-      def ree?
-        ID == :ree
-      end
-      alias enterprise? ree?
-
-      # @attribute [r] jit_enabled?
-      # @return [true, false] whether the interpreter currently uses a JIT
-      #   Compiler
-      def jit_enabled?
-        jit_type != :none
-      end
-
-      # @attribute [r] jit_type
-      # @return [:mjit, :rjit, :yjit, :java, :none] type of currently used JIT
-      #   Compiler
-      def jit_type
-        return :mjit if defined?(RubyVM::MJIT) && RubyVM::MJIT.enabled?
-        return :yjit if defined?(RubyVM::YJIT) && RubyVM::YJIT.enabled?
-        return :rjit if defined?(RubyVM::RJIT) && RubyVM::RJIT.enabled?
-        jruby? ? :java : :none
-      end
-
-      # @!visibility private
-      def to_s
-        NAMES[ID] || ID.to_s.upcase
-      end
-
-      # @!method is?(what)
-      # @param what [Symbol, String] the identifier to check
-      # @return [true, false] whether the interpreter is the given identifier
-
-      # @comment YARD requires this line
-
-      private
-
-      def identify
-        if defined?(RUBY_PLATFORM) && (RUBY_PLATFORM == 'parrot')
-          return :cardinal
-        end
-        return :mri unless defined?(RUBY_ENGINE)
-        return RUBY_ENGINE.to_sym if RUBY_ENGINE != 'ruby'
-        RUBY_DESCRIPTION.downcase.include?('enterprise') ? :ree : :mri
-      end
-    end
-
-    # @return [Symbol] interpreter identifier
-    ID = identify
-
-    NAMES = {
-      cardinal: 'Cardinal',
-      jruby: 'JRuby',
-      mri: 'CRuby',
-      rby: 'Rubinius',
-      ree: 'Enterprise Ruby',
-      truffleruby: 'TruffleRuby'
-    }.compare_by_identity.freeze
-
-    private_constant :NAMES
-  end
-
-  extend Helper
-
   class << self
-    # @attribute [r] id
-    # @return [Symbol] OS identifier
-    def id
-      ID
-    end
-
-    # @attribute [r] type
     # @return [:unix,  :windows, :vms, :os2, :unknown] OS type
-    def type
-      TYPE
-    end
+    attr_reader :type
 
-    # @attribute [r] interpreter
+    # @!attribute [r] interpreter
     # @return [Interpreter] interpreter information
     def interpreter
       Interpreter
     end
 
-    # @attribute [r] env
+    # @!attribute [r] env
     # @return [Env] environment information
     def env
       Env
     end
 
-    # @attribute [r] unix?
+    # @!attribute [r] unix?
     # @return [true, false] whether the host OS is a Unix OS
     def unix?
-      TYPE == :unix
+      @type == :unix
     end
 
-    # @attribute [r] windows?
+    # @!attribute [r] windows?
     # @return [true, false] whether the host OS is a Windows OS
     def windows?
-      TYPE == :windows
+      @type == :windows
     end
 
-    # @attribute [r] vms?
+    # @!attribute [r] vms?
     # @return [true, false] whether the host OS is VMS
     def vms?
-      TYPE == :vms
+      @type == :vms
     end
 
-    # @attribute [r] os2?
+    # @!attribute [r] os2?
     # @return [true, false] whether the host OS is OS/2
     def os2?
-      TYPE == :os2
+      @type == :os2
     end
 
-    # @attribute [r] macosx?
+    # @!attribute [r] macosx?
     # @return [true, false] whether the host OS is identified as MacOS
     def macosx?
-      ID == :macosx
+      @id == :macosx
     end
 
-    # @attribute [r] linux?
+    # @!attribute [r] linux?
     # @return [true, false] whether the host OS is identified as Linux derivate
     def linux?
-      ID == :linux
+      @id == :linux
     end
 
-    # @attribute [r] cygwin?
+    # @!attribute [r] cygwin?
     # @return [true, false] whether the host OS is Windows/Cygwin
     def cygwin?
-      ID == :cygwin
+      @id == :cygwin
     end
 
-    # @attribute [r] posix?
+    # @!attribute [r] posix?
     # @return [true, false] whether the host OS is Posix compatible
     # This attribute is `true` when Posix compatible commands like `fork` are
     # available.
@@ -286,14 +75,41 @@ module HostOS
     # @param what [Symbol, String] the identifier to check
     # @return [true, false] whether the host OS is the given identifier or type
     def is?(what)
-      return true if (ID == what) || (TYPE == what)
-      what = defined?(what.to_sym) ? what.to_sym : what.to_s.to_sym
-      (ID == what) || (TYPE == what)
+      return (@id == what) || (@type == what) if what.is_a?(Symbol)
+      if defined?(what.to_sym)
+        what = what.to_sym
+        return (@id == what) || (@type == what)
+      end
+      if defined?(what.to_s)
+        what = what.to_s.to_sym
+        return (@id == what) || (@type == what)
+      end
+      false
     end
+
+    # @!attribute [r] id
+    # @return [Symbol] OS identifier
 
     # @!visibility private
     def to_s
-      NAMES[ID] || ID.to_s.upcase
+      @to_s ||=
+        {
+          bccwin: 'BCCWin',
+          cygwin: 'Cygwin',
+          dragonfly: 'Dragonly',
+          freebsd: 'FreeBSD',
+          linux: 'Linux',
+          macosx: 'MacOSX',
+          mingw: 'MinGW',
+          mswin: 'MSWin',
+          netbsd: 'NetBSD',
+          openbsd: 'OpenBSD',
+          sunos: 'SunOS',
+          wince: 'WinCE',
+          windows: 'Windows'
+        }.compare_by_identity[
+          @id
+        ] || @id.to_s.upcase
     end
 
     private
@@ -331,20 +147,92 @@ module HostOS
     end
   end
 
-  ID, TYPE = identify
-  NAMES = {
-    bccwin: 'BCCWin',
-    cygwin: 'Cygwin',
-    dragonfly: 'Dragonly',
-    freebsd: 'FreeBSD',
-    linux: 'Linux',
-    macosx: 'MacOSX',
-    mingw: 'MinGW',
-    mswin: 'MSWin',
-    netbsd: 'NetBSD',
-    openbsd: 'OpenBSD',
-    sunos: 'SunOS',
-    wince: 'WinCE',
-    windows: 'Windows'
-  }.compare_by_identity.freeze
+  module Helper
+    attr_reader :id
+
+    def is?(what)
+      return id == what if what.is_a?(Symbol)
+      return id == what.to_sym if defined?(what.to_sym)
+      return id == what.to_s.to_sym if defined?(what.to_s)
+      false
+    end
+
+    private
+
+    def respond_to_missing?(name, _include_all = false)
+      (name[-1] == '?') || super
+    end
+
+    def method_missing(name, *args)
+      return super if name[-1] != '?'
+      return is?(name[0..-2]) if args.empty?
+      raise(
+        ArgumentError,
+        "wrong number of arguments (given #{args.size}, expected 0)"
+      )
+    end
+  end
+  private_constant :Helper
+
+  #
+  # This module allows to identify the current environment by checking the `ENV`
+  # for the following variables in order:
+  #
+  # * RAILS_ENV
+  # * RACK_ENV
+  # * ENVIRONMENT
+  # * ENV
+  #
+  # You can check for any boolean attribute:
+  #
+  # @example Query if the environment is configured as "staging"
+  #   HostOS.env.staging?
+  # @example Test if the environment is configured as "production"
+  #   HostOS.env.is? :production
+  #
+  # @note When no environment is configured `production` is assumed.
+  #
+  module Env
+    extend Helper
+
+    class << self
+      # @!attribute [r] production?
+      # @return [true, false] whether the environment is configured as "production"
+      # @note This will return true if the environment is not configured.
+
+      # @!attribute [r] test?
+      # @return [true, false] whether the environment is configured as "test"
+
+      # @!attribute [r] development?
+      # @return [true, false] whether the environment is configured as
+      #   "development"
+
+      # @!attribute [r] id
+      # @return [Symbol] environment identifier
+
+      # @!method is?(what)
+      # @param what [Symbol, String] the identifier to check
+      # @return [true, false] whether the environment is the given identifier
+
+      # @comment YARD requires this line
+
+      private
+
+      def identify
+        found =
+          ENV['RAILS_ENV'] || ENV['RACK_ENV'] || ENV['ENVIRONMENT'] ||
+            ENV['ENV']
+        return :production if found.nil? || found.empty?
+        found.downcase.gsub(/\W/, '_').to_sym
+      end
+    end
+
+    @id = identify
+  end
+
+  autoload :Interpreter, "#{__dir__}/host-os/interpreter.rb"
+
+  extend Helper
+
+  @id, @type = identify
 end
