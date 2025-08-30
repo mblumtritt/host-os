@@ -1,3 +1,7 @@
+> [!IMPORTANT]  
+> I archived this repo here and moved it to [Codeberg](https://codeberg.org/mblumtritt/host-os) for several reasons.
+> <br/><br/>🛠️ It's still active there!
+
 # HostOS ![version](https://img.shields.io/gem/v/host-os?label=)
 
 HostOS is a module that offers details about the host operating system, the current Ruby interpreter, and the environment currently in use.
